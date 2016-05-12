@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.18.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.18.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<style>
+#map {
+    position: fixed;
+    width:50%;
+}
+#features {
+    width: 50%;
+    margin-left: 50%;
+    font-family: sans-serif;
+    overflow-y: scroll;
+    background-color: #fafafa;
+}
+section {
+    padding:  25px 50px;
+    line-height: 25px;
+    border-bottom: 1px solid #ddd;
+    opacity: 0.25;
+    font-size: 13px;
+}
+section.active {
+    opacity: 1;
+}
+section:last-child {
+    border-bottom: none;
+    margin-bottom: 200px;
+}
+</style>
+
+<div id='map'></div>
+<div id='features'>
+    <section id='kino01' class='active'>
+        <h3>AL-01: CRUZANDO TERRITORIO SERI</h3>
+        <p>El 20 de diciembre de 2015 corrimos 90 kilometros (56mi) a lo largo de la costa del desierto de Sonora en México. Esta experiencia marcó el comienzo de Aire Libre y de nuestros siguientes proyectos. La ruta nos llevó desde El Desemboque a Bahía de Kino, a lo largo de la Isla del Tiburón, a través de los paisajes más increíbles, y nos dio la oportunidad de conocer a la tribu Seri que aún habita en estas tierras.</p>
+    </section>
+    <section id='kino02'>
+        <h3>AL-01: CRUZANDO TERRITORIO SERI</h3>
+        <p>Salir de la pequeña ciudad costera de El Desemboque a las 5:30 am, después de dormir en el suelo en una escuela de baile local, para llegar a nuestro destino en Bahía de Kino a las 7:00 pm, marcó un tiempo total de 13:30 horas, con 8:18 horas de corrida efectiva. La ruta elegida incluyó paisajes singulares, cuando el intenso calor y lo seco del desierto se encuentra con las aguas profundas y frías del Mar de Cortés, se genera una energía muy intensa y única, conocida sólo por aquellos que han pasado el tiempo suficiente en este territorio.</p>
+    </section>
+    <section id='kino03'>
+        <h3>AL-01: CRUZANDO TERRITORIO SERI</h3>
+        <p>Después de la corrida acampamos en Punta Chueca en la casa de los Barnett, una de las familias más reconocidas entre los Seri debido a sus contribuciones a la historia y las tradiciones de esta cultura milenaria. Francisco "Chapo" Barnett, quien fue siguiéndonos en un coche durante el trayecto final de la corrida, cantando y transmitiendo vibras positivas, nos recibió a la mañana siguiente con más bendiciones y cantos para poner en marcha nuestra recuperación. Físicamente deshechos, pero con el espíritu en alto, volvimos a casa con ganas de inspirar a otros a salir y vivir experiencias similares. Éste es el resultado. Estén al tanto de más proyectos como éste y asómense a nuestro video y fotos para profundizar en esta historia.</p>
+    </section>
+    <section id='mancomuna01'>
+        <h3>AL 02 : PUEBLOS MANCOMUNADOS, SIERRA NORTE DE OAXACA</h3>
+        <p>Nuestra siguiente aventura será una corrida de aproximadamente 120km por los caminos de terracería que conectan a los Pueblos Mancomunados en la sierra norte del Estado de Oaxaca. Los Pueblos Mancomunados son un grupo de 8 pueblos Zapotecas localizados al norte de la sierra de Oaxaca, y que están conectados por más de 140km de caminos escénicos.</p>
+    </section>
+    <section id='mancomuna02'>
+        <h3>AL 02 : PUEBLOS MANCOMUNADOS, SIERRA NORTE DE OAXACA</h3>
+        <p>Más información pronto.</p>
+    </section>
+    <section>
+      <img src="http://static1.squarespace.com/static/566059dbe4b0e6b1f4e10077/5660b0e0e4b0830bdc0df6dd/56cb87bd859fd03dbedffe22/1460227710765/?format=1000w" width="100%" />
+    </section>
+</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoicm9kb3dpIiwiYSI6ImdZdDkyQU0ifQ.bPu86kwHgaenPhYp84g1yg';
+
+var chapters = {
+    'kino01': {
+        bearing: 25,
+        center: [-112.16011047363281, 29.015946651147658],
+        zoom: 15,
+        pitch: 20
+    },
+    'kino02': {
+        bearing: 90,
+        center: [-112.09144592285155, 28.957685518378977],
+        zoom: 15,
+        pitch: 20
+    },
+    'kino03': {
+        bearing: 110,
+        center: [-111.97128295898438, 28.85249228815448],
+        zoom: 15,
+        pitch: 20
+    },
+    'mancomuna01': {
+        bearing: 150,
+        center: [-96.72088623046875, 17.041029311689186],
+        zoom: 15,
+        pitch: 0
+    },
+    'mancomuna02': {
+        bearing: 90,
+        center: [-96.4654541015625, 15.70501873999827],
+        zoom: 15,
+        pitch: 0
+    }
+};
+
+// On every scroll event, check which element is on screen
+window.onscroll = function() {
+    var chapterNames = Object.keys(chapters);
+    for (var i = 0; i < chapterNames.length; i++) {
+        var chapterName = chapterNames[i];
+        if (isElementOnScreen(chapterName)) {
+            setActiveChapter(chapterName);
+            break;
+        }
+    }
+};
+
+var activeChapterName = 'kino01';
+function setActiveChapter(chapterName) {
+    if (chapterName === activeChapterName) return;
+
+    map.flyTo(chapters[chapterName]);
+
+    document.getElementById(chapterName).setAttribute('class', 'active');
+    document.getElementById(activeChapterName).setAttribute('class', '');
+
+    activeChapterName = chapterName;
+}
+
+function isElementOnScreen(id) {
+    var element = document.getElementById(id);
+    var bounds = element.getBoundingClientRect();
+    return bounds.top < window.innerHeight && bounds.bottom > 0;
+}
+
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/outdoors-v9',
+    center: chapters[activeChapterName].center,
+    zoom: 15.5,
+    bearing: 27,
+    pitch: 45
+});
+
+</script>
+
+</body>
+</html>
