@@ -142,6 +142,45 @@ var map = new mapboxgl.Map({
     pitch: 45
 });
 
+map.on('load', function () {
+  map.addSource('al-01', {
+      'type': 'geojson',
+      'data': './tracks/al01.json'
+  });
+  map.addSource('al-02', {
+      'type': 'geojson',
+      'data': './tracks/al02.json'
+  });
+
+  map.addLayer({
+      'id': 'al-01-fill',
+      'type': 'line',
+      'source': 'al-01',
+      'layout': {
+          'line-join': 'round',
+          'line-cap': 'round'
+      },
+      'paint': {
+          'line-color': '#333',
+          'line-width': 1
+      }
+  });
+  map.addLayer({
+      'id': 'al-02-fill',
+      'type': 'line',
+      'source': 'al-02',
+      'layout': {
+          'line-join': 'round',
+          'line-cap': 'round'
+      },
+      'paint': {
+          'line-color': '#333',
+          'line-width': 1
+      }
+  });
+
+});
+
 </script>
 
 </body>
